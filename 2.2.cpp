@@ -642,4 +642,7 @@ int main()
 	_nmsp9::myuni<int, char> myu;
 	myu.carnum = 156;
 	cout << myu.carnum << endl; // 156
+
+	cout << "Over!\n";
+	return 0;
 }
