@@ -10,11 +10,11 @@ namespace ns1
 	class Human
 	{
 	public:
+		virtual ~Human() {} // 作为父类存在时一般应该书写虚析构函数
 		virtual void eat()
 		{
 			cout << "人类以米饭和面食为主!" << endl;
 		}
-		virtual ~Human() {} // 作为父类存在时一般应该书写虚析构函数
 	};
 
 	class Men : public Human
@@ -63,18 +63,19 @@ namespace ns2
 
 int main()
 {
-#if 1
+#if 0
 	using namespace ns1;
-	Men objmen;
-	Women objwomen;
 	// 父类引用(指针)绑定（指向）子类对象，以表现多态
+	Men objmen;
 	Human &yinbase1 = objmen;
-	Human *yinbase2 = &objwomen;
 	yinbase1.eat();
+
+	Women objwomen;
+	Human *yinbase2 = &objwomen;
 	yinbase2->eat();
 #endif
 
-#if 0
+#if 1
 	using namespace ns2;
 	Men objmen;
 	Women objwomen;

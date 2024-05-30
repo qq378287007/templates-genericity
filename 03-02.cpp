@@ -2,7 +2,7 @@
 #include <vector>
 
 using namespace std;
-#include <boost/type_index.hpp>
+##include <boost/type_index.hpp>
 
 //函数模板
 template <typename T>
@@ -147,7 +147,7 @@ int main()
 
 	//auto x = 27;    //x = int,auto = int
 
-	
+	/*
 	auto x = 27;    //估计：x = int,auto = int
 	const auto x2 = x;  //估计：x2 = const int,auto =int
 	const auto& xy = x; //这个auto并不是传值方式，估计：xy = const int &,auto = int
@@ -165,5 +165,7 @@ int main()
 	auto&& wnyy0 = 222;  //估计：这是万能引用，222是右值，所以：auto = int,wnyy0 = int&&（右值引用）
 	auto&& wnyy1 = x;//估计：这是万能引用，x是左值，所以：auto=int&，wnyy1=int&
 	auto&& wnyy2 = x2;   //编译器推断：这是万能引用，x2是左值，则auto是int const & ，wnyy2也是int const &
-
+*/
+	cout << "Over!\n";
+	return 0;
 }
