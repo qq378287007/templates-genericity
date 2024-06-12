@@ -58,5 +58,8 @@
         "xutility": "cpp",
         "string": "cpp",
         "algorithm": "cpp"
+    },
+    "code-runner.executorMap": {
+		"cpp": "cd $dir && g++ $fileName -I. -o $fileNameWithoutExt && $dir$fileNameWithoutExt"
     }
 }

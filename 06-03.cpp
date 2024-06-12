@@ -160,7 +160,8 @@ namespace tplt
 	class reverse<TPLT, true>
 	{
 	public:
-	//	using type = typename TPLT; // 其实此时的TPLT就是typelist<>
+		using type = TPLT;
+		// using type = typename TPLT; // 其实此时的TPLT就是typelist<>
 	};
 }
 
@@ -188,7 +189,6 @@ namespace tplt2
 		using type = typename TPLT::Head;
 	};
 
-	//---------------------------
 	// 泛化版本
 	template <typename TPLT>
 	class size;
@@ -209,7 +209,6 @@ namespace tplt2
 		static inline size_t value = size<U>::value + 1; // 递归调用
 	};
 
-	//-----------------------------
 	template <typename TPLT>
 	class pop_front
 	{
@@ -217,14 +216,13 @@ namespace tplt2
 		using type = typename TPLT::Tail;
 	};
 
-	//-----------------------------
 	template <typename TPLT, typename NewElem>
 	class push_front
 	{
 	public:
 		using type = Typelist<NewElem, TPLT>;
 	};
-	//-----------------------------
+
 	// 泛化版本
 	template <typename TPLT>
 	class is_empty
@@ -241,19 +239,17 @@ namespace tplt2
 		static inline const bool value = true;
 	};
 
-	//-------------------------------
-	/*//泛化版本
-	template<typename TPLT, unsigned int index_v>
-	class find : public find < typename pop_front<TPLT>::type, index_v - 1>
+	// 泛化版本
+	template <typename TPLT, unsigned int index_v>
+	class find2 : public find2<typename pop_front<TPLT>::type, index_v - 1>
 	{
 	};
-	//特化版本
-	template<typename TPLT>
-	class find<TPLT, 0> : public front<TPLT>  //0，作为递归的出口了
+	// 特化版本
+	template <typename TPLT>
+	class find2<TPLT, 0> : public front<TPLT> // 0，作为递归的出口了
 	{
 	};
-	*/
-	//-------------------------------
+
 	// 泛化版本
 	template <class TPLT, unsigned int index_v>
 	class find;
@@ -274,7 +270,6 @@ namespace tplt2
 		using type = typename find<Tail, index_v - 1>::type;
 	};
 
-	//-------------------------------
 	// 泛化版本
 	template <class TPLT, unsigned int index_v, typename DefaultType = NullTypelist>
 	class find_nostrict
@@ -312,10 +307,7 @@ namespace ns1
 		using Arg3 = typename tplt2::find_nostrict<Args, 2>::type;
 		// 可以根据需要加入更多Arg开头的类型
 
-		void myfunc(Arg1 val1, Arg2 val2)
-		{
-			std::cout << "myfunc执行了：参数之和为：" << val1 + val2 << endl;
-		}
+		void myfunc(Arg1 val1, Arg2 val2) { cout << "myfunc, sum: " << val1 + val2 << endl; }
 	};
 }
 
@@ -361,44 +353,50 @@ int main()
 	cout << tplt::is_empty<TPL_NM2>::value << endl;
 #endif
 
-#if 1
+#if 0
 	using namespace tplt;
 
 	cout << typeid(tplt::find<TPL_NM1, 2>::type).name() << endl;
 	// cout << typeid(tplt::find<TPL_NM1, 20>::type).name() << endl; // 超出边界编译时就会报错
 
 	cout << typeid(get_maxsize_type<TPL_NM1>::type).name() << endl;
+	cout << typeid(get_maxsize_type<TPL_NM2>::type).name() << endl;
 
-	// cout << typeid(tplt::reverse<typelist<int, double, float>>::type).name() << endl;
+	cout << typeid(tplt::reverse<TPL_NM1>::type).name() << endl;
+	cout << typeid(tplt::reverse<TPL_NM2>::type).name() << endl;
+	cout << typeid(tplt::reverse<typelist<int, double, float>>::type).name() << endl;
 #endif
 
-	// cout << typeid(tplt2::front<MAC_TYPELIST1(int) >::type).name() << endl;
-	// cout << typeid(tplt2::front< MAC_TYPELIST3(char, float, double) >::type).name() << endl;
+#if 0
+	using namespace tplt2;
+	cout << typeid(front<MAC_TYPELIST1(int)>::type).name() << endl;
+	cout << typeid(front<MAC_TYPELIST3(char, float, double)>::type).name() << endl;
 
-	/*cout << tplt2::size< tplt2::NullTypelist >::value << endl;
-	cout << tplt2::size< MAC_TYPELIST1(int) >::value << endl;
-	cout << tplt2::size< MAC_TYPELIST3(int, double, char) >::value << endl;*/
+	cout << tplt2::size<NullTypelist>::value << endl;
+	cout << tplt2::size<MAC_TYPELIST1(int)>::value << endl;
+	cout << tplt2::size<MAC_TYPELIST3(int, double, char)>::value << endl;
 
-	/*cout << typeid(tplt2::pop_front<MAC_TYPELIST1(int) >::type).name() << endl;
-	cout << typeid(tplt2::pop_front<	MAC_TYPELIST3(char, float, double)>::type).name() << endl;*/
+	cout << typeid(pop_front<MAC_TYPELIST1(int)>::type).name() << endl;
+	cout << typeid(pop_front<MAC_TYPELIST3(char, float, double)>::type).name() << endl;
 
-	/*cout << typeid(tplt2::push_front<MAC_TYPELIST1(int), bool>::type).name() << endl;
-	cout << typeid(tplt2::push_front<MAC_TYPELIST2(char, double), int>::type).name() << endl;*/
+	cout << typeid(push_front<MAC_TYPELIST1(int), bool>::type).name() << endl;
+	cout << typeid(push_front<MAC_TYPELIST2(char, double), int>::type).name() << endl;
 
-	/*cout << tplt2::is_empty<MAC_TYPELIST1(int)>::value << endl;
+	cout << tplt2::is_empty<MAC_TYPELIST1(int)>::value << endl;
 	cout << tplt2::is_empty<MAC_TYPELIST3(char, float, double)>::value << endl;
-	cout << tplt2::is_empty<tplt2::NullTypelist>::value << endl;
-	*/
+	cout << tplt2::is_empty<NullTypelist>::value << endl;
 
-	/*cout << typeid(tplt2::find<MAC_TYPELIST1(int), 0>::type).name() << endl;
-	cout << typeid(tplt2::find<MAC_TYPELIST3(char, float, double), 2>::type).name() << endl;*/
-
+	cout << typeid(tplt2::find<MAC_TYPELIST1(int), 0>::type).name() << endl;
+	cout << typeid(tplt2::find<MAC_TYPELIST3(char, float, double), 2>::type).name() << endl;
 	// cout << typeid(tplt2::find<MAC_TYPELIST3(char, float, double), 5>::type).name() << endl;
 
-	/*cout << typeid(tplt2::find_nostrict<
-		MAC_TYPELIST4(int, double, char, float), 2>::type).name() << endl;
-	cout << typeid(tplt2::find_nostrict<
-		MAC_TYPELIST4(int, double, char, float), 100>::type).name() << endl;*/
+	cout << typeid(tplt2::find2<MAC_TYPELIST1(int), 0>::type).name() << endl;
+	cout << typeid(tplt2::find2<MAC_TYPELIST3(char, float, double), 2>::type).name() << endl;
+	// cout << typeid(tplt2::find2<MAC_TYPELIST3(char, float, double), 5>::type).name() << endl;
+
+	cout << typeid(tplt2::find_nostrict<MAC_TYPELIST4(int, double, char, float), 2>::type).name() << endl;
+	cout << typeid(tplt2::find_nostrict<MAC_TYPELIST4(int, double, char, float), 100>::type).name() << endl;
+#endif
 
 #if 1
 	using namespace ns1;

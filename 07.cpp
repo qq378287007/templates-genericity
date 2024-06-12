@@ -6,8 +6,7 @@
 using namespace std;
 
 // #include <boost/type_index.hpp>
-
-#pragma warning(disable : 4996)
+// #pragma warning(disable : 4996)
 
 namespace ns1
 {
@@ -69,8 +68,15 @@ namespace ns1
 		}
 		~mylist() // 析构函数
 		{
-			clear(); // 注意位置，要放在delete head;语言行之前
-			// delete (void *)head; // 释放特殊mylist_node对象所指向的内存
+			for (mylist_node<T> *currnode = head->next; currnode != head;)
+			{
+				mylist_node<T> *nextnode = currnode->next;
+				delete currnode;
+				currnode = nextnode;
+			}
+			// clear(); // 注意位置，要放在delete head;语言行之前
+
+			//  delete (void *)head; // 释放特殊mylist_node对象所指向的内存
 			delete head;
 			head = nullptr;
 		}
@@ -129,8 +135,9 @@ namespace ns1
 	};
 
 	// 别名模板
-	template <class _Iter>													//_Iter代表迭代器类型
+	template <class _Iter> //_Iter代表迭代器类型
 	using _Iter_cat_t = typename iterator_traits<_Iter>::iterator_category; // 为萃取机定义别名模板（5.1.2节看到过）
+	//using _Iter_cat_t = typename iterator_traits<_Iter>::bidirectional_iterator_tag; // 为萃取机定义别名模板（5.1.2节看到过）
 
 	// 变量模板（元函数）
 	// template <class _From, class _To>
@@ -194,13 +201,14 @@ int main()
 	// bidirectional_iterator_tag
 	// list<int>::iterator
 	cout << typeid(mylist_iterator<int>::iterator_category).name() << endl;
+	//cout << typeid(mylist_iterator<int>::bidirectional_iterator_tag).name() << endl;
 #endif
 
 #if 0
 	list<int> msgList10;
 	msgList10.push_back(1);
 	msgList10.push_back(2);
-	// sort(msgList10.begin(), msgList10.end());
+	//sort(msgList10.begin(), msgList10.end());
 	msgList10.sort();
 #endif
 

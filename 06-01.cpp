@@ -93,7 +93,6 @@ namespace ns4
 	template <>
 	constexpr int result2<0>() { return 1; };
 
-	//--------------------
 	// 泛化版本
 	template <int... FTArgs>
 	constexpr int resultsum = 0;
@@ -102,7 +101,6 @@ namespace ns4
 	template <int First, int... Others>
 	constexpr int resultsum<First, Others...> = First + resultsum<Others...>;
 
-	//---------------------
 	template <int... FTArgs>
 	constexpr int resultsum2()
 	{
@@ -126,10 +124,11 @@ int main()
 #if 0
 	using namespace ns1;
 	constexpr int var = 11 * myfunc(12);
-	static_assert(var == 264, "sth error");
+	static_assert(var == 264, "sth error");//static_assert，静态断言，编译期间断言，用于判断var是否编译期间求值
 
 	int var2 = 12;
 	int var3 = myfunc2(var2);
+	int var4 = myfunc(var2);//运行时被调用
 #endif
 
 #if 0
@@ -160,15 +159,15 @@ int main()
 	cout << result<5> << endl;	  // 120
 	cout << result2<5>() << endl; // 120
 
-	cout << resultsum<1, 10, 100> << endl; // 111
-	cout << resultsum2<1, 10, 100>() << endl;
+	cout << resultsum<1, 10, 100> << endl;	  // 111
+	cout << resultsum2<1, 10, 100>() << endl; // 111
 #endif
 
 #if 1
 	using namespace ns5;
-	AddPoint<const char>::type s = "I Love China!";
+	AddPoint<const char>::type s = "I Love China!"; // const char *
 	printf("type(s): %s\n", typeid(decltype(s)).name());
-	AddPoint2<const char> s2 = "I Love China!";
+	AddPoint2<const char> s2 = "I Love China!"; // const char *
 	printf("type(s2): %s\n", typeid(decltype(s2)).name());
 #endif
 

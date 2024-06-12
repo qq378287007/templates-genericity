@@ -1,56 +1,52 @@
-// MyProject.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-//
-//公众号：程序员速成 ，内含一辈子都让你感激自己的优质视频教程，欢迎关注
-
 #include <iostream>
 #include <vector>
-
 using namespace std;
+
 #include <boost/type_index.hpp>
 
-#pragma warning(disable : 4996) 
+// #pragma warning(disable : 4996)
 
 namespace _nmsp1
 {
-	//void funcLast(int v1, int v2)
-	void funcLast(int v1, int& v2)
+	// void funcLast(int v1, int v2)
+	void funcLast(int v1, int &v2)
 	{
-		++v2; //改变v2值，让其自增1
+		++v2; // 改变v2值，让其自增1
 		cout << v1 + v2 << endl;
 	}
 
-	void funcLast2(int&& v1, int& v2)
+	void funcLast2(int &&v1, int &v2)
 	{
 		cout << v1 << endl;
 		cout << v2 << endl;
 	}
-	
-	//跳板函数
+
+	// 跳板函数
 	template <typename F, typename T1, typename T2>
-	//void funcMiddle_Temp(F f, T1 t1, T2 t2) //f：函数指针类型void (*)(int,int)，而funcLast是函数类型void (int,int)
-	void funcMiddle_Temp(F f, T1&& t1, T2&& t2)
+	// void funcMiddle_Temp(F f, T1 t1, T2 t2) //f：函数指针类型void (*)(int,int)，而funcLast是函数类型void (int,int)
+	void funcMiddle_Temp(F f, T1 &&t1, T2 &&t2)
 	{
-		//f(t1, t2);
+		// f(t1, t2);
 		f(std::forward<T1>(t1), std::forward<T2>(t2));
 	}
 }
 namespace _nmsp2
 {
-	void printInfo(int& t)
+	void printInfo(int &t)
 	{
 		cout << "printInfo()参数类型为左值引用" << endl;
 	}
-	void printInfo(int&& t)
+	void printInfo(int &&t)
 	{
 		cout << "printInfo()参数类型为右值引用" << endl;
 	}
-	void printInfo(const int& t)
+	void printInfo(const int &t)
 	{
 		cout << "printInfo()参数类型为const左值引用" << endl;
 	}
 
 	template <typename T>
-	void TestF(T&& t) //万能引用
+	void TestF(T &&t) // 万能引用
 	{
 		printInfo(std::forward<T>(t));
 	}
@@ -65,10 +61,10 @@ namespace _nmsp3
 	{
 		cout << "v1=" << v1 << endl;
 	}
-		
+
 	void funcMiddle_Temp2()
 	{
-		auto&& result = getData();//getData返回的是右值，所以：auto = int,result = int&&（右值引用）
+		auto &&result = getData(); // getData返回的是右值，所以：auto = int,result = int&&（右值引用）
 		//......对result做各种运算等等
 		funcLast3(std::forward<decltype(result)>(result));
 	}
@@ -79,36 +75,34 @@ namespace _nmsp4
 	{
 	public:
 		////构造函数
-		//Human(const string& tmpname) :m_sname(tmpname)
-		//{			
+		// Human(const string& tmpname) :m_sname(tmpname)
+		//{
 		//	cout << "Human(const string & tmpname)执行" << endl;
-		//}
-	
+		// }
+
 		////Human(string&& tmpname) :m_sname(tmpname)
-		//Human(string&& tmpname) :m_sname(std::move(tmpname))
+		// Human(string&& tmpname) :m_sname(std::move(tmpname))
 		//{
 		//	cout << "Human(string && tmpname)执行" << endl;
-		//}
+		// }
 
-		template<typename T>
-		Human(T&& tmpname) :m_sname(std::forward<T>(tmpname))
-		{			
+		template <typename T>
+		Human(T &&tmpname) : m_sname(std::forward<T>(tmpname))
+		{
 			cout << "Human(T&& tmpname)执行" << endl;
 		}
 
-		Human(const Human& th) : m_sname(th.m_sname)
+		Human(const Human &th) : m_sname(th.m_sname)
 		{
 			cout << "Human(Human const& th)拷贝构造函数执行" << endl;
 		}
-		Human(Human&& th) : m_sname(std::move(th.m_sname))
+		Human(Human &&th) : m_sname(std::move(th.m_sname))
 		{
 			cout << "Human(Human const& th)移动构造函数执行" << endl;
 		}
 
-
 	private:
-		string m_sname;  //姓名	
-
+		string m_sname; // 姓名
 	};
 
 }
@@ -127,18 +121,17 @@ namespace _nmsp5
 	}*/
 
 	template <typename F, typename... T>
-	decltype(auto) funcMiddle_Temp(F f, T&&... t)
+	decltype(auto) funcMiddle_Temp(F f, T &&...t)
 	{
 		return f(std::forward<T>(t)...);
 	}
 
-
-	//void funcLast(int v1, int& v2)
+	// void funcLast(int v1, int& v2)
 	//{
 	//	++v2; //改变v2值，让其自增1
 	//	cout << v1 + v2 << endl;
-	//}
-	int funcLast(int v1, int& v2)
+	// }
+	int funcLast(int v1, int &v2)
 	{
 		++v2;
 		cout << v1 + v2 << endl;
@@ -149,22 +142,22 @@ namespace _nmsp5
 namespace _nmsp6
 {
 	template <typename F, typename... T>
-	decltype(auto) funcMiddle_Temp(F f, T&&... t)
+	decltype(auto) funcMiddle_Temp(F f, T &&...t)
 	{
 		return f(std::forward<T>(t)...);
 	}
 
-	void funcLast4(char* p)
+	void funcLast4(char *p)
 	{
-		//if (p != NULL)
+		// if (p != NULL)
 		if (p != nullptr)
-			strncpy(p, "abc", 3);  //为保证这行编译通过，请在.cpp开头位置增加：#pragma warning(disable : 4996) 
+			strncpy(p, "abc", 3); // 为保证这行编译通过，请在.cpp开头位置增加：#pragma warning(disable : 4996)
 	}
 
 }
 
 int main()
-{	
+{
 	/*int i = 50;
 	_nmsp1::funcLast(41, i); //正常显示结果92
 	*/
@@ -220,25 +213,15 @@ int main()
 	cout << "j = " << j << endl;
 	cout << "k = " << k << endl;*/
 
+	/*
+		char* p = new char[100];
+		memset(p, 0, 100);
+		//_nmsp6::funcMiddle_Temp(_nmsp6::funcLast4, p);
+		//_nmsp6::funcMiddle_Temp(_nmsp6::funcLast4, NULL);
+		_nmsp6::funcMiddle_Temp(_nmsp6::funcLast4, nullptr);
 
-	char* p = new char[100];
-	memset(p, 0, 100);
-	//_nmsp6::funcMiddle_Temp(_nmsp6::funcLast4, p);
-	//_nmsp6::funcMiddle_Temp(_nmsp6::funcLast4, NULL);
-	_nmsp6::funcMiddle_Temp(_nmsp6::funcLast4, nullptr);
-
-	delete[]p;
-
-	
+		delete[]p;
+	*/
+	cout << "Over!\n";
+	return 0;
 }
-
-// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
-// 调试程序: F5 或调试 >“开始调试”菜单
-
-// 入门使用技巧: 
-//   1. 使用解决方案资源管理器窗口添加/管理文件
-//   2. 使用团队资源管理器窗口连接到源代码管理
-//   3. 使用输出窗口查看生成输出和其他消息
-//   4. 使用错误列表窗口查看错误
-//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
-//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件

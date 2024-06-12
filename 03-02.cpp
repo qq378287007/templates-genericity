@@ -1,73 +1,249 @@
 #include <iostream>
+#include <initializer_list>
 #include <vector>
-
 using namespace std;
-##include <boost/type_index.hpp>
 
-//函数模板
-template <typename T>
-//void myfunc(T& tmprv)
-//void myfunc(const T& tmprv)
-//void myfunc(T* tmprv)
-//void myfunc(T&& tmprv)
-//void myfunc(T tmprv)
-//template <typename T, unsigned L1>
-//void myfunc(T(&tmprv)[L1])
-void myfunc(std::initializer_list<T> tmprv)
-{
-	//tmprv = 15;
-
-	//int& tmpvaluec = tmprv;
-	//tmpvaluec = 1200;
-
-	//cout << L1 << endl;
-
-	cout << "---------------------begin------------------------" << endl;
-	using boost::typeindex::type_id_with_cvr;
-	cout << "T=" << type_id_with_cvr<T>().pretty_name() << endl;               //显示T类型
-	cout << "tmprv=" << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; //显示tmprv类型
-	cout << "----------------------end-------------------------" << endl;
-}
-
-template<typename T>
-void tf(const T& tmprv) //这里把auto替换成T,上面auto里的xy就相当于这里的tmprv
-{
-	cout << "---------------------begin------------------------" << endl;;
-	using boost::typeindex::type_id_with_cvr;
-	cout << "T=" << type_id_with_cvr<T>().pretty_name() << endl;               //显示T类型
-	cout << "tmprv=" << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; //显示tmprv类型
-	cout << "----------------------end-------------------------" << endl;;		return;
-}
-
-
-//void mf(int& tmprv) 
-//{
-//	tmpv = 12;
-//}
-template <typename T>
-void mf(T tmprv)
-{
-	tmprv = 12;
-
-	cout << "---------------------begin------------------------" << endl;
-	using boost::typeindex::type_id_with_cvr;
-	cout << "T=" << type_id_with_cvr<T>().pretty_name() << endl;               //显示T类型
-	cout << "tmprv=" << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; //显示tmprv类型
-	cout << "----------------------end-------------------------" << endl;
-}
+#include <boost/type_index.hpp>
+using boost::typeindex::type_id_with_cvr;
 
 void testFunc() {}
 
-namespace _nmsp1
+namespace ns0
 {
+	// 函数模板
+	template <typename T>
+	void myfunc(initializer_list<T> tmprv)
+	{
+		// tmprv = 15;
 
-	
+		// int& tmpvaluec = tmprv;
+		// tmpvaluec = 1200;
 
+		// cout << L1 << endl;
+
+		cout << "---------------------begin------------------------" << endl;
+		cout << "T = " << type_id_with_cvr<T>().pretty_name() << endl;					 // 显示T类型
+		cout << "tmprv = " << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; // 显示tmprv类型
+		cout << "----------------------end-------------------------" << endl;
+	}
+
+	template <typename T>
+	void tf(const T &tmprv) // 这里把auto替换成T,上面auto里的xy就相当于这里的tmprv
+	{
+		cout << "---------------------begin------------------------" << endl;
+
+		cout << "T=" << type_id_with_cvr<T>().pretty_name() << endl;				   // 显示T类型
+		cout << "tmprv=" << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; // 显示tmprv类型
+		cout << "----------------------end-------------------------" << endl;
+	}
+
+	void mf0(int &tmprv) { tmprv = 12; }
+
+	template <typename T>
+	void mf(T tmprv)
+	{
+		tmprv = 12;
+
+		cout << "---------------------begin------------------------" << endl;
+		cout << "T = " << type_id_with_cvr<T>().pretty_name() << endl;					 // 显示T类型
+		cout << "tmprv = " << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; // 显示tmprv类型
+		cout << "----------------------end-------------------------" << endl;
+	}
+}
+
+namespace ns1
+{
+	template <typename T>
+	void myfunc(const T &tmprv)
+	{
+		cout << "---------------------begin------------------------" << endl;
+
+		cout << "T = " << type_id_with_cvr<T>().pretty_name() << endl;					 // 显示T类型
+		cout << "tmprv = " << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; // 显示tmprv类型
+		cout << "----------------------end-------------------------" << endl;
+	}
+}
+
+namespace ns2
+{
+	template <typename T>
+	void myfunc(T &tmprv)
+	{
+		cout << "---------------------begin------------------------" << endl;
+
+		cout << "T = " << type_id_with_cvr<T>().pretty_name() << endl;					 // 显示T类型
+		cout << "tmprv = " << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; // 显示tmprv类型
+		cout << "----------------------end-------------------------" << endl;
+	}
+
+	void mf(int &tmprv) { tmprv = 12; }
+
+	template <typename T>
+	void mf2(T &tmprv) { tmprv = 12; }
+
+	template <typename T>
+	void mf3(T tmprv) { tmprv = 12; }
+}
+
+namespace ns3
+{
+	template <typename T>
+	void myfunc(const T &tmprv)
+	{
+		cout << "---------------------begin------------------------" << endl;
+
+		cout << "T = " << type_id_with_cvr<T>().pretty_name() << endl;					 // 显示T类型
+		cout << "tmprv = " << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; // 显示tmprv类型
+		cout << "----------------------end-------------------------" << endl;
+	}
+}
+
+namespace ns4
+{
+	template <typename T>
+	void myfunc(T *tmprv)
+	{
+		cout << "---------------------begin------------------------" << endl;
+
+		cout << "T = " << type_id_with_cvr<T>().pretty_name() << endl;					 // 显示T类型
+		cout << "tmprv = " << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; // 显示tmprv类型
+		cout << "----------------------end-------------------------" << endl;
+	}
+}
+
+namespace ns5
+{
+	template <typename T>
+	void myfunc(T &&tmprv)
+	{
+		cout << "---------------------begin------------------------" << endl;
+
+		cout << "T = " << type_id_with_cvr<T>().pretty_name() << endl;					 // 显示T类型
+		cout << "tmprv = " << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; // 显示tmprv类型
+		cout << "----------------------end-------------------------" << endl;
+	}
+}
+
+namespace ns6
+{
+	template <typename T>
+	void myfunc(T tmprv)
+	{
+		cout << "---------------------begin------------------------" << endl;
+
+		cout << "T = " << type_id_with_cvr<T>().pretty_name() << endl;					 // 显示T类型
+		cout << "tmprv = " << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; // 显示tmprv类型
+		cout << "----------------------end-------------------------" << endl;
+	}
+}
+
+namespace ns7
+{
+	template <typename T, unsigned L1>
+	void myfunc(T (&tmprv)[L1])
+	{
+		cout << "---------------------begin------------------------" << endl;
+
+		cout << "T = " << type_id_with_cvr<T>().pretty_name() << endl; // 显示T类型
+		cout << "L1 = " << L1 << endl;
+		cout << "tmprv = " << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; // 显示tmprv类型
+		cout << "----------------------end-------------------------" << endl;
+	}
 }
 
 int main()
-{	
-	//myfunc(100);
+{
+#if 0
+	using namespace ns1;
+	myfunc(100);
+#endif
+
+#if 0
+	using namespace ns2;
+	int i = 100;
+	const int j = i;
+	const int &k = i;
+	myfunc(i);
+	myfunc(j);
+	myfunc(k);
+
+	int ii = 1;
+	int &jj = ii;
+	mf(jj);
+	cout << ii << endl;
+
+	ii = 1;
+	mf2(jj);
+	cout << ii << endl;
+
+	ii = 1;
+	mf3(jj);
+	cout << ii << endl;
+#endif
+
+#if 0
+	using namespace ns3;
+	int i = 100;
+	const int j = i;
+	const int &k = i;
+	myfunc(i);
+	myfunc(j);
+	myfunc(k);
+#endif
+
+#if 0
+	using namespace ns4;
+	int i = 100;
+	const int *pi = &i;
+	myfunc(&i);
+	myfunc(pi);
+#endif
+
+#if 0
+	using namespace ns5;
+	int i = 100;
+	const int j = i;
+	const int &k = i;
+	myfunc(i);
+	myfunc(j);
+	myfunc(k);
+	myfunc(100);
+#endif
+
+#if 0
+	using namespace ns6;
+	int i = 100;
+	const int j = i;
+	const int &k = i;
+	myfunc(i);
+	myfunc(j);
+	myfunc(k);
+
+	int &m = i;
+	myfunc<int &>(m);
+
+	char mystr[] = "I Love China!";
+	const char *const p = mystr;
+	myfunc(p);
+
+	int mm = 180;
+	myfunc(std::ref(mm));
+	myfunc(std::cref(mm));
+
+	const char mystr2[] = "I Love China!";
+	myfunc(mystr2);
+
+	ns2::myfunc(mystr2);
+	ns7::myfunc(mystr2);
+#endif
+
+#if 1
+	ns6::myfunc(testFunc);
+	ns2::myfunc(testFunc);
+	ns0::myfunc({1, 2, 3});
+#endif
+
+	// myfunc(100);
 
 	/* //myfunc(T& tmprv)
 	int i = 18;            //一眼看得出来i的类型为int
@@ -82,7 +258,7 @@ int main()
 	{
 		int ii = 1;
 		int& jj = i;
-		mf(jj); 
+		mf(jj);
 		cout << ii << endl;
 	}
 	*/
@@ -142,17 +318,17 @@ int main()
 	myfunc(mystr);//看实际执行结果：T=char const [14], tmprv =char const (&)[14]
 	*/
 
-	//myfunc(testFunc);
-	//myfunc({ 1, 2, 3 });
+	// myfunc(testFunc);
+	// myfunc({ 1, 2, 3 });
 
-	//auto x = 27;    //x = int,auto = int
+	// auto x = 27;    //x = int,auto = int
 
 	/*
 	auto x = 27;    //估计：x = int,auto = int
 	const auto x2 = x;  //估计：x2 = const int,auto =int
 	const auto& xy = x; //这个auto并不是传值方式，估计：xy = const int &,auto = int
 	auto xy2 = xy; //估计：xy2 = int,auto = int。这种应该是属于传值方式，传值方式时：引用类型会被抛弃,const属性会被抛弃，xy2是个新副本，这一点和函数模板类型推断非常类似
-	//using boost::typeindex::type_id_with_cvr;
+	//
 	//cout << "xy2=" << type_id_with_cvr<decltype(xy2)>().pretty_name() << endl;
 	tf(x);
 
@@ -165,7 +341,7 @@ int main()
 	auto&& wnyy0 = 222;  //估计：这是万能引用，222是右值，所以：auto = int,wnyy0 = int&&（右值引用）
 	auto&& wnyy1 = x;//估计：这是万能引用，x是左值，所以：auto=int&，wnyy1=int&
 	auto&& wnyy2 = x2;   //编译器推断：这是万能引用，x2是左值，则auto是int const & ，wnyy2也是int const &
-*/
+	*/
 	cout << "Over!\n";
 	return 0;
 }
