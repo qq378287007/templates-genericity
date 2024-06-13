@@ -1,12 +1,8 @@
 #include <iostream>
-// #include <vector>
-// #include <list>
-// #include <functional>
-
 using namespace std;
-// #include <boost/type_index.hpp>
 
-// #pragma warning(disable : 4996)
+#include <boost/type_index.hpp>
+using boost::typeindex::type_id_with_cvr;
 
 namespace ns1
 {
@@ -20,6 +16,7 @@ namespace ns1
 		return abc * 2;
 	}
 }
+
 namespace ns2
 {
 	template <int x_v, int y_v>
@@ -59,6 +56,7 @@ namespace ns2
 		};
 	};
 }
+
 namespace ns3
 {
 	constexpr int Factorial(int n_v)
@@ -74,6 +72,7 @@ namespace ns3
 		return n_v <= 1 ? 1 : (n_v * Factorial2(n_v - 1));
 	}
 }
+
 namespace ns4
 {
 	// 变量模板（其实 result代表的是常量），看起来也象函数调用，也是元函数的一种形式
@@ -107,6 +106,7 @@ namespace ns4
 		return (... + FTArgs); // 或者写成return (0 + ... + FTArgs);
 	}
 }
+
 namespace ns5
 {
 	template <typename T>
@@ -166,9 +166,9 @@ int main()
 #if 1
 	using namespace ns5;
 	AddPoint<const char>::type s = "I Love China!"; // const char *
-	printf("type(s): %s\n", typeid(decltype(s)).name());
+	cout << "type(s): " << type_id_with_cvr<decltype(s)>().pretty_name() << endl;
 	AddPoint2<const char> s2 = "I Love China!"; // const char *
-	printf("type(s2): %s\n", typeid(decltype(s2)).name());
+	cout << "type(s2): " << type_id_with_cvr<decltype(s2)>().pretty_name() << endl;
 #endif
 
 	cout << "Over!\n";

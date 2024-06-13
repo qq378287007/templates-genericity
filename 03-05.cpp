@@ -1,52 +1,56 @@
 #include <iostream>
 #include <vector>
-
 using namespace std;
-#include <boost/type_index.hpp>
 
-#pragma warning(disable : 4996) 
+// #include <boost/type_index.hpp>
+// using boost::typeindex::type_id_with_cvr;
+// #pragma warning(disable : 4996)
 
-namespace _nmsp1
+namespace ns1
 {
-	template<typename... Args>
-	class myclasst
+	template <typename... Args>
+	struct myclasst
 	{
-	public:
-		myclasst()
-		{
-			cout << "myclasst::myclasst()执行了，可变参个数=" << sizeof...(Args) << endl;
-		}
+		myclasst() { cout << "myclasst::myclasst(), sizeof...(Args) = " << sizeof...(Args) << endl; }
 	};
 
-	template<typename... Args>
-	//class myclasst2 : public myclasst<Args...>
-	//class myclasst2 : public myclasst <Args>...
-	//class myclasst2 : public myclasst <Args,char>...
-	class myclasst2 : public myclasst <Args, Args...>...
+	template <typename... Args>
+	struct myclasst2 : myclasst<Args...>
 	{
-	public:
-		myclasst2()
-		{
-			cout << "myclasst2::myclasst2()执行了，可变参个数=" << sizeof...(Args) << endl;
-		}
+		myclasst2() { cout << "myclasst2::myclasst2(), sizeof...(Args) = " << sizeof...(Args) << endl; }
 	};
 
+	template <typename... Args>
+	struct myclasst3 : myclasst<Args>...
+	{
+		myclasst3() { cout << "myclasst3::myclasst3(), sizeof...(Args) = " << sizeof...(Args) << endl; }
+	};
+
+	template <typename... Args>
+	struct myclasst4 : myclasst<Args, char>...
+	{
+		myclasst4() { cout << "myclasst4::myclasst4(), sizeof...(Args) = " << sizeof...(Args) << endl; }
+	};
+
+	template <typename... Args>
+	struct myclasst5 : myclasst<Args, Args...>...
+	{
+		myclasst5() { cout << "myclasst5::myclasst5(), sizeof...(Args) = " << sizeof...(Args) << endl; }
+	};
 }
 
 int main()
-{	
-	_nmsp1::myclasst2<double, float, int> tmpobj;
+{
+	using namespace ns1;
+	myclasst2<double, float, int> tmpobj2;
+	cout<<"*************************\n";
+	myclasst3<double, float, int> tmpobj3;
+	cout<<"*************************\n";
+	myclasst4<double, float, int> tmpobj4;
+	cout<<"*************************\n";
+	myclasst5<double, float, int> tmpobj5;
+	cout<<"*************************\n";
 
-
+	cout << "Over!\n";
+	return 0;
 }
-
-// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
-// 调试程序: F5 或调试 >“开始调试”菜单
-
-// 入门使用技巧: 
-//   1. 使用解决方案资源管理器窗口添加/管理文件
-//   2. 使用团队资源管理器窗口连接到源代码管理
-//   3. 使用输出窗口查看生成输出和其他消息
-//   4. 使用错误列表窗口查看错误
-//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
-//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件

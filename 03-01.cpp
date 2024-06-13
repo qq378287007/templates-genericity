@@ -4,22 +4,15 @@ using namespace std;
 
 namespace ns0
 {
-	void func(const int &abc)
-	{
-		cout << "void func(const int &abc)" << endl;
-	}
-	/*
+	void func(const int &) { cout << "void func(const int &)" << endl; }
+
+	// template <typename T>
+	// void func(const T &) { cout << "void func<T>(const T &)" << endl; }
+
 	template <typename T>
-	void func(const T &abc)
-	{
-		cout << "void func<T>(const T &abc)" << endl;
-	}
-	*/
-	template <typename T>
-	void func(vector<T> &&param)
-	{
-		cout << "void func<T>(vector<T> &&param)" << endl;
-	}
+	void func(vector<T> &&) { cout << "void func<T>(vector<T> &&)" << endl; }
+
+	void myfunc(int &&) { cout << "void myfunc(int &&)" << endl; }
 }
 
 namespace ns1
@@ -53,34 +46,35 @@ namespace ns2
 		void testfunc2(T2 &&x) {} // T2类型独立，和T没关系，万能引用
 	};
 }
+
 int main()
 {
-#if 0
+#if 1
 	using namespace ns0;
-	func(10);
+
+	func(10); // 常量左值引用指向右值
+
 	vector<int> aa = {1};
-	func(move(aa)); // 不用move不行。也就是说，用左值当参数传递是不行的
-	//func(aa);
+	func(move(aa)); // 必须move，vector只接受右值
 
-	/*ns1::
-	ns1::myfunc(10); //正确，右值做实参
-	int i = 100;
-	ns1::myfunc(i); //错，右值引用不能接(绑)左值
-	*/
-#endif
+	// func(aa);//error
 
-#if 0
-	using namespace ns1;
-	int i = 100;
-	myfunc(i); // 左值被传递，因此tmprv是左值引用，也就是类型为int &。执行完毕后，i值变成12
-	cout << "i=" << i << endl;
-
-	i = 200;
-	myfunc(move(i)); // 右值被传递，因此tmprv是右值引用，也就是类型为int &&。执行完毕后，i值变成12
-	cout << "i=" << i << endl;
+	//int i = 100;
+	//myfunc(i); //错，右值引用不能接(绑)左值
 #endif
 
 #if 1
+	using namespace ns1;
+	int i = 100;
+	myfunc(i); // 左值被传递，因此tmprv是左值引用，也就是类型为int &。执行完毕后，i值变成12
+	cout << "i = " << i << endl;
+
+	i = 200;
+	myfunc(move(i)); // 右值被传递，因此tmprv是右值引用，也就是类型为int &&。执行完毕后，i值变成12
+	cout << "i = " << i << endl;
+#endif
+
+#if 0
 	using namespace ns2;
 	int i = 100;
 	myfunc(move(i));

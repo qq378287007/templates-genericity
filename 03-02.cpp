@@ -31,7 +31,6 @@ namespace ns0
 	void tf(const T &tmprv) // 这里把auto替换成T,上面auto里的xy就相当于这里的tmprv
 	{
 		cout << "---------------------begin------------------------" << endl;
-
 		cout << "T=" << type_id_with_cvr<T>().pretty_name() << endl;				   // 显示T类型
 		cout << "tmprv=" << type_id_with_cvr<decltype(tmprv)>().pretty_name() << endl; // 显示tmprv类型
 		cout << "----------------------end-------------------------" << endl;

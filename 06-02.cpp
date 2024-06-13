@@ -1,12 +1,5 @@
 #include <iostream>
-// #include <vector>
-// #include <list>
-// #include <functional>
-
 using namespace std;
-// #include <boost/type_index.hpp>
-
-// #pragma warning(disable : 4996)
 
 namespace ns1
 {

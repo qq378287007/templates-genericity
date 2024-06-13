@@ -1,12 +1,8 @@
 #include <iostream>
-// #include <vector>
-// #include <list>
-// #include <functional>
-
 using namespace std;
-// #include <boost/type_index.hpp>
 
-// #pragma warning(disable : 4996)
+#include <boost/type_index.hpp>
+using boost::typeindex::type_id_with_cvr;
 
 namespace ns1
 {
@@ -33,7 +29,8 @@ namespace ns1
 	};
 
 }
-namespace _nmsp2
+
+namespace ns2
 {
 	void lastfunc(int &&tmprv) {}
 
@@ -45,6 +42,7 @@ namespace _nmsp2
 	}
 
 }
+
 namespace tpl
 {
 	// 泛化版本
@@ -64,17 +62,17 @@ namespace tpl
 		TuplE()
 		{
 		}
-	/*
-		// 构造函数模板2，支持tpl::TuplE<int, float> mytuple(12, 23.5f); 构造方式
-		// template<typename C_First, typename... C_Others>
-		template <typename C_First, typename... C_Others, typename = std::enable_if_t<!HasMemFunc<C_First>::value>>
-		TuplE(C_First &&parf, C_Others &&...paro)										  // C_First代表一个元素类型比如float，C_Others代表其余一堆元素类型比如int,std::string，parf或first代表第一个元素比如12.5f，others或paro代表其余的元素，比如100，std::string("abc")
-			: first(std::forward<C_First>(parf)), others(std::forward<C_Others>(paro)...) // others是TuplE<...>类型
-		{
-			// cout << "TuplE构造函数模板2执行了，first = " << first << endl;// 为避免报错，牵扯开发者精力，不要输出first值，因为可能有些first值不能用cout正常输出
-			cout << "TuplE构造函数模板2执行了！" << endl;
-		}
-*/
+		/*
+			// 构造函数模板2，支持tpl::TuplE<int, float> mytuple(12, 23.5f); 构造方式
+			// template<typename C_First, typename... C_Others>
+			template <typename C_First, typename... C_Others, typename = std::enable_if_t<!HasMemFunc<C_First>::value>>
+			TuplE(C_First &&parf, C_Others &&...paro)										  // C_First代表一个元素类型比如float，C_Others代表其余一堆元素类型比如int,std::string，parf或first代表第一个元素比如12.5f，others或paro代表其余的元素，比如100，std::string("abc")
+				: first(std::forward<C_First>(parf)), others(std::forward<C_Others>(paro)...) // others是TuplE<...>类型
+			{
+				// cout << "TuplE构造函数模板2执行了，first = " << first << endl;// 为避免报错，牵扯开发者精力，不要输出first值，因为可能有些first值不能用cout正常输出
+				cout << "TuplE构造函数模板2执行了！" << endl;
+			}
+	*/
 	public:
 		TuplE(const TuplE<First, Others...> &tmptpl) : // TuplE( TuplE<First, Others...>& tmptpl) :
 													   first(tmptpl.first), others(tmptpl.others)
@@ -280,7 +278,6 @@ auto TPL_MidReverse(const tpl::TuplE<Elems...> &tmptuple)
 {
 	return TPL_LastReverse(tmptuple, Integer_Sequence_Reverse_T<unsigned int, sizeof...(Elems)>());
 }
-//--------------------------------------------------------------
 
 int main()
 {
@@ -301,8 +298,8 @@ int main()
 	ns1::TmpClass<int> tcobj2(k);*/
 
 	/*
-	//_nmsp2::lastfunc(10);
-	_nmsp2::midfunc(10);*/
+	//ns2::lastfunc(10);
+	ns2::midfunc(10);*/
 
 	/*
 	tuple<float, int, std::string> mytuple(12.5f, 100, "abc");//一个tuple（元组）：一堆各种类型数据的组合

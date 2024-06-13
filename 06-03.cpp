@@ -1,12 +1,8 @@
 #include <iostream>
-// #include <vector>
-// #include <list>
-// #include <functional>
 using namespace std;
 
-// #include <boost/type_index.hpp>
-
-// #pragma warning(disable : 4996)
+#include <boost/type_index.hpp>
+using boost::typeindex::type_id_with_cvr;
 
 namespace tplt
 {
@@ -353,18 +349,18 @@ int main()
 	cout << tplt::is_empty<TPL_NM2>::value << endl;
 #endif
 
-#if 0
+#if 1
 	using namespace tplt;
 
-	cout << typeid(tplt::find<TPL_NM1, 2>::type).name() << endl;
-	// cout << typeid(tplt::find<TPL_NM1, 20>::type).name() << endl; // 超出边界编译时就会报错
+	cout << "tplt::find<TPL_NM1, 2>::type: " << type_id_with_cvr<tplt::find<TPL_NM1, 2>::type>().pretty_name() << endl;
+	// cout << "tplt::find<TPL_NM1, 20>::type: " << type_id_with_cvr<tplt::find<TPL_NM1, 20>::type>().pretty_name() << endl;// 超出边界编译时就会报错
 
-	cout << typeid(get_maxsize_type<TPL_NM1>::type).name() << endl;
-	cout << typeid(get_maxsize_type<TPL_NM2>::type).name() << endl;
+	cout << "get_maxsize_type<TPL_NM1>::type: " << type_id_with_cvr<get_maxsize_type<TPL_NM1>::type>().pretty_name() << endl;
+	cout << "get_maxsize_type<TPL_NM2>::type: " << type_id_with_cvr<get_maxsize_type<TPL_NM2>::type>().pretty_name() << endl;
 
-	cout << typeid(tplt::reverse<TPL_NM1>::type).name() << endl;
-	cout << typeid(tplt::reverse<TPL_NM2>::type).name() << endl;
-	cout << typeid(tplt::reverse<typelist<int, double, float>>::type).name() << endl;
+	cout << "tplt::reverse<TPL_NM1>::type: " << type_id_with_cvr<tplt::reverse<TPL_NM1>::type>().pretty_name() << endl;
+	cout << "tplt::reverse<TPL_NM2>::type: " << type_id_with_cvr<tplt::reverse<TPL_NM2>::type>().pretty_name() << endl;
+	cout << "tplt::reverse<typelist<int, double, float>>::type: " << type_id_with_cvr<tplt::reverse<typelist<int, double, float>>::type>().pretty_name() << endl;
 #endif
 
 #if 0
@@ -398,7 +394,7 @@ int main()
 	cout << typeid(tplt2::find_nostrict<MAC_TYPELIST4(int, double, char, float), 100>::type).name() << endl;
 #endif
 
-#if 1
+#if 0
 	using namespace ns1;
 	TestTPClass<MAC_TYPELIST2(int, int)> myodtpobj;
 	myodtpobj.myfunc(18, 19);
