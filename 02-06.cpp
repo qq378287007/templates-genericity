@@ -26,20 +26,14 @@ namespace ns1
 	class Derived1 : public Base<Derived1> // Derived1是普通类
 	{
 	public:
-		void myfunc()
-		{
-			cout << "Derived1::myfunc()" << endl;
-		}
+		void myfunc() { cout << "Derived1::myfunc()" << endl; }
 	};
 
 	template <typename T>
 	class Derived2 : public Base<Derived2<T>> // Derived2是类模板
 	{
 	public:
-		void myfunc()
-		{
-			cout << "Derived2<T>::myfunc()" << endl;
-		}
+		void myfunc() { cout << "Derived2<T>::myfunc()" << endl; }
 	};
 
 	// class Derived3 : public Base<Derived1>
@@ -70,6 +64,7 @@ namespace ns1
 		return (obj1.sidelength < obj2.sidelength);
 	}
 }
+
 namespace ns2
 {
 	// 基类模板
@@ -121,6 +116,7 @@ namespace ns2
 		tmpobj.parenteat();
 	}
 }
+
 namespace ns3
 {
 	// struct role
@@ -186,6 +182,7 @@ namespace ns3
 	using role_npc = role<npcattr>;
 	using role_mixnpc = role<npcattr, playerattr>;
 }
+
 namespace ns4
 {
 	template <typename... T>
@@ -212,6 +209,7 @@ namespace ns4
 		virtual void myfunc() {}
 	};
 }
+
 namespace ns5
 {
 	class A

@@ -16,40 +16,29 @@ namespace ns1
 		cout << "---------end------------" << endl;
 	}
 
-	void myvtfunct()
-	{
-		cout << "void myvtfunct()" << endl;
-	}
+	void myvtfunct() { cout << "void myvtfunct()" << endl; }
+
 	template <typename T, typename... U>
 	void myvtfunct(T firstarg, U... otherargs)
 	{
 		cout << "T: " << firstarg << endl;
 
-		// myvtfunct(otherargs...); //递归调用，注意塞进来的是一包形参，这里...不能省略
-
-		if constexpr (sizeof...(otherargs) > 0) // constexpr必须有否则无法成功编译，圆括号中是常量表达式
+		if constexpr (sizeof...(otherargs) > 0) // constexpr必须有否则无法成功编译(编译期间if语句，不满足条件分支也会被编译)，圆括号中是常量表达式
 			myvtfunct(otherargs...);			// 递归调用，塞进来的是一包形参，这里...不能省略
 	}
 }
+
 namespace ns2
 {
 	template <typename... T>
-	void myfunc(T... arg)
-	{
-		cout << "myfunc<typename... T>(T... arg)" << endl;
-	}
+	void myfunc(T...) { cout << "myfunc<typename... T>(T...)" << endl; }
 
 	template <typename... T>
-	void myfunc(T *...args)
-	{
-		cout << "myfunc<typename... T>(T*... args)" << endl;
-	}
+	void myfunc(T *...) { cout << "myfunc<typename... T>(T*...)" << endl; }
 
-	void myfunc(int arg)
-	{
-		cout << "myfunc(int arg)" << endl;
-	}
+	void myfunc(int) { cout << "myfunc(int)" << endl; }
 }
+
 namespace ns3
 {
 	template <typename... T>
@@ -64,6 +53,7 @@ namespace ns3
 	{
 		return (... - args); // 形式1
 	}
+	
 	template <typename... T>
 	auto sub_val_right(T... args)
 	{
@@ -88,6 +78,7 @@ namespace ns3
 		return (args - ... - 220);
 	}
 }
+
 namespace ns4
 {
 	template <typename... T>
@@ -107,6 +98,7 @@ namespace ns4
 		print_result(args + args...);
 	}
 }
+
 namespace ns5
 {
 	template <typename... Args>
@@ -163,6 +155,7 @@ namespace ns5
 	};
 	*/
 }
+
 namespace ns6
 {
 	template <int... FTArgs> // int替换为auto也没问题
@@ -185,6 +178,7 @@ namespace ns6
 		}
 	};
 }
+
 namespace ns7
 {
 	template <typename T, template <typename> typename... Container> // 泛化
@@ -219,6 +213,7 @@ namespace ns7
 		}
 	};
 }
+
 namespace ns8
 {
 	template <typename... Args>
@@ -252,6 +247,7 @@ namespace ns8
 		myclasst<Others...> m_o;
 	};
 }
+
 namespace ns9
 {
 	template <int mycount, int mymaxcount, typename... T> // mycount用于统计，从0开始，mymaxcount表示参数数量，可以用sizeof...取得
@@ -282,6 +278,7 @@ namespace ns9
 		myclasst4<0, sizeof...(T), T...>::mysfunc(t); // 注意第一个参数是0，表示计数从0开始
 	}
 }
+
 namespace ns10
 {
 	template <typename... myclasstPList>
@@ -328,6 +325,7 @@ namespace ns10
 		char m_s1[300];
 	};
 }
+
 namespace ns11
 {
 	template <typename... Args> // 泛化版本
@@ -391,11 +389,11 @@ int main()
 	using namespace ns2;
 	myfunc(NULL);
 	myfunc(nullptr);
-	myfunc((int*)nullptr);
+	myfunc((int *)nullptr);
 	myfunc(0);
 #endif
 
-#if 0
+#if 1
 	using namespace ns3;
 	cout << add_val(10, 20, 30) << endl;		   // 60(10+20+30)
 	cout << sub_val_left(10, 20, 30, 40) << endl;  //-80(10-20-30-40)
@@ -455,7 +453,7 @@ int main()
 	cout << "sizeof(obj)=" << sizeof(obj) << endl; // 600
 #endif
 
-#if 1
+#if 0
 	using namespace ns11;
 	myclasst<> myc0;
 	myclasst<int> myc1;

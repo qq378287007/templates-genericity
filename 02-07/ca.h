@@ -25,4 +25,4 @@ template <typename T2>
 A<C>::A(T2 v1, T2 v2) { cout << v1 << v2 << endl; }
 
 extern template void myfunc<int>(int, int);
-extern template struct A<float>; // 函数模板实例化声明
+extern template struct A<float>; // 模板实例化声明

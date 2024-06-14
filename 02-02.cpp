@@ -257,7 +257,7 @@ namespace ns5
 	template <typename T2> // 再跟构造函数模板自己的模板参数列表
 	A<T1>::A(T2 v1, T2 v2)
 	{
-		cout << "A::A(T2, T2)" << endl;
+		cout << "A<T1>::A(T2, T2)" << endl;
 	}
 
 	// 在类外实现类模板的A的myft成员函数模板的偏特化版本
@@ -513,17 +513,17 @@ int main()
 
 #if 1
 	using namespace ns5;
-	//A<float> a(1, 2); //实例化了一个A<float>这样一个类，并用int型来实例化构造函数
-	//  a.myft(3); //3
-	//A<float> a2(1.1, 2.2); //A<float>已经被上面代码行实例化过了，这里用double来实例化构造函数，因为1.1和2.2都是double类型
-	/*A<float> a3(11.1f, 12.2f); //这里用float来实例化构造函数，因为以f结尾的数字是float类型
+	A<float> a(1, 2); //实例化了一个A<float>这样一个类，并用int型来实例化构造函数
+	a.myft(3); //3
+	A<float> a2(1.1, 2.2); //A<float>已经被上面代码行实例化过了，这里用double来实例化构造函数，因为1.1和2.2都是double类型
+	A<float> a3(11.1f, 12.2f); //这里用float来实例化构造函数，因为以f结尾的数字是float类型
 
 	a3.m_ic = 16.2f;
 	A<float> a4(a3);
 	A<int> a5(a3); //a3的类型是A<float>,a5的类型是A<int>
 
 	a3 = a4;
-	a3 = a5;*/
+	a3 = a5;
 
 	/*A<float> a2(1, 2);
 	a2.myft(3.1, 2);
