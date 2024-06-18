@@ -63,7 +63,7 @@ int main()
 	//myfunc(i); //错，右值引用不能接(绑)左值
 #endif
 
-#if 1
+#if 0
 	using namespace ns1;
 	int i = 100;
 	myfunc(i); // 左值被传递，因此tmprv是左值引用，也就是类型为int &。执行完毕后，i值变成12
