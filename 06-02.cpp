@@ -12,6 +12,7 @@ namespace ns1
 		return dpresult;
 	}
 }
+
 namespace ns2
 {
 	// 泛化版本
@@ -28,6 +29,7 @@ namespace ns2
 		static T result(const T *, const T *) { return T{}; }
 	};
 }
+
 namespace ns3
 {
 	/*
@@ -52,6 +54,7 @@ namespace ns3
 		static const int value = x_v; // int可以用auto代替，书写更方便
 	};
 }
+
 namespace ns4
 {
 	// 泛化版本
@@ -89,7 +92,7 @@ int main()
 	cout << result << endl;
 #endif
 
-#if 0
+#if 1
 	using namespace ns2;
 	int a[] = {1, 2, 3};
 	int b[] = {4, 5, 6};
@@ -107,7 +110,7 @@ int main()
 	cout << InstantiationObServe<6, 4>::value << endl;
 #endif
 
-#if 1
+#if 0
 	using namespace ns4;
 	cout << InstantiationObServe<6, 4>::value << endl;
 #endif

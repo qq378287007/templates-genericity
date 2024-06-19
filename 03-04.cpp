@@ -2,18 +2,14 @@
 #include <vector>
 using namespace std;
 
-//#include <boost/type_index.hpp>
-// using boost::typeindex::type_id_with_cvr;
-//#pragma warning(disable : 4996)
-
 namespace ns1
 {
 	template <typename T>
-	void myfunc(const T &t) { cout << "myfunc(const T& t)" << endl; }
+	void myfunc(const T &) { cout << "myfunc(const T&)" << endl; }
 
-	void myfunc(int tmpvalue) { cout << "myfunc(int tmpvalue)" << endl; }
+	void myfunc(int) { cout << "myfunc(int)" << endl; }
 
-	void myfunc(unsigned int tmpvalue) { cout << "myfunc(unsigned int tmpvalue)" << endl; }
+	void myfunc(unsigned int) { cout << "myfunc(unsigned int)" << endl; }
 }
 
 namespace ns2
@@ -37,7 +33,7 @@ namespace ns3
 	{
 	};
 
-	template <class _Ty> // 偏特化版本
+	template <class _Ty> // 偏特化版本，_Ty默认值是void（与泛化版本一致）
 	struct enable_if<true, _Ty>
 	{
 		using type = _Ty;
@@ -47,47 +43,70 @@ namespace ns3
 namespace ns4
 {
 	template <typename T>
-	// typename std::enable_if< (sizeof(T) > 2) >::type  funceb()
-	// std::enable_if_t< (sizeof(T) > 2) >  funceb()
+	typename std::enable_if<(sizeof(T) > 2)>::type funceb1() {}
+
+	template <bool _Test, class _Ty = void>
+	using enable_if_t = typename std::enable_if<_Test, _Ty>::type;
+
+	template <typename T>
+	enable_if_t<(sizeof(T) > 2)> funceb2() {}
+
+	template <typename T>
 	std::enable_if_t<(sizeof(T) > 2), T> funceb()
 	{
 		T myt = {};
 		return myt;
 	}
-
-	// template <bool _Test, class _Ty = void>
-	// using enable_if_t = typename enable_if<_Test, _Ty>::type;
 }
 
 namespace ns5
+{
+	class Human
+	{
+		string m_sname;
+
+	public: // U可省略（没用到），T不能转换为string时，这个函数模板会被忽略
+		template <typename T, typename U = std::enable_if_t<std::is_convertible<T, std::string>::value>>
+		Human(T &&tmpname) : m_sname(std::forward<T>(tmpname))
+		{
+			cout << "Human(T &&)" << endl;
+		}
+
+		Human(const Human &th) : m_sname(th.m_sname) // 拷贝构造函数
+		{
+			cout << "Human(Human const &)" << endl;
+		}
+		Human(Human &&th) : m_sname(std::move(th.m_sname)) // 移动构造函数
+		{
+			cout << "Human(Human &&)" << endl;
+		}
+	};
+}
+
+namespace ns6
 {
 	template <typename T>
 	using StrProcType = std::enable_if_t<std::is_convertible<T, std::string>::value>;
 
 	class Human
 	{
-	public:
-		// template<typename T>
-		template <
-			typename T, // typename = std::enable_if_t<std::is_convertible<T, std::string>::value>
-			typename = StrProcType<T>>
+		string m_sname;
 
+	public: // U可省略（没用到），T不能转换为string时，这个函数模板会被忽略
+		template <typename T, typename U = StrProcType<T>>
 		Human(T &&tmpname) : m_sname(std::forward<T>(tmpname))
 		{
-			cout << "Human(T &&tmpname)" << endl;
+			cout << "Human(T &&)" << endl;
 		}
 
-		Human(const Human &th) : m_sname(th.m_sname)
+		Human(const Human &th) : m_sname(th.m_sname) // 拷贝构造函数
 		{
-			cout << "Human(Human const &th)" << endl;
+			cout << "Human(Human const &)" << endl;
 		}
-		Human(Human &&th) : m_sname(std::move(th.m_sname))
+		Human(Human &&th) : m_sname(std::move(th.m_sname)) // 移动构造函数
 		{
-			cout << "Human(Human &&th)" << endl;
+			cout << "Human(Human &&)" << endl;
 		}
-
-	private:
-		string m_sname; // 姓名
 	};
 }
 
@@ -95,6 +114,7 @@ int main()
 {
 #if 0
 	using namespace ns1;
+	myfunc(15);
 	myfunc(15u);
 #endif
 
@@ -111,14 +131,15 @@ int main()
 	MEB<int>::type abc = 15;
 
 	ns3::enable_if<(3 > 2)>::type *mypoint1 = nullptr; // 等价于void *mypoint1 = nullptr;
-
 	// ns3::enable_if<(3 < 2)>::type *mypoint2 = nullptr;	// error
 #endif
 
 #if 0
 	using namespace ns4;
+	funceb1<int>();
+	funceb2<int>();
 	funceb<int>();
-	// funceb<char>();//eror
+	//funceb<char>();//eror
 #endif
 
 #if 0
@@ -126,12 +147,22 @@ int main()
 	cout << "float => int: " << std::is_convertible<float, int>::value << endl;		  // 1
 #endif
 
-#if 1
+#if 0
 	using namespace ns5;
 	string sname = "ZhangSan";
-	Human myhuman1(sname);		// Human(T &&tmpname)
-	Human myhuman2("ZhangSan"); // Human(T &&tmpname)
-	Human myhuman3(myhuman1);	// Human(Human const &th)
+	Human myhuman1(sname);		// Human(T &&)
+	Human myhuman2("ZhangSan"); // Human(T &&)
+	Human myhuman3(myhuman1);	// Human(Human const &)
+	Human myhuman4(move(myhuman1));	// Human(Human &&)
+#endif
+
+#if 1
+	using namespace ns6;
+	string sname = "ZhangSan";
+	Human myhuman1(sname);			// Human(T &&)
+	Human myhuman2("ZhangSan");		// Human(T &&)
+	Human myhuman3(myhuman1);		// Human(Human const &)
+	Human myhuman4(move(myhuman1)); // Human(Human &&)
 #endif
 
 	cout << "Over!\n";

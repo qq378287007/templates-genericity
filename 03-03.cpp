@@ -21,8 +21,7 @@ namespace ns1
 		cout << v2 << endl;
 	}
 
-	// f：函数指针类型void (*)(int, int)，而funcLast2是函数类型void (int, int)
-
+	// f：函数指针类型void (*)(int, int)，而funcLast0是函数类型void (int, int)
 	template <typename F, typename T1, typename T2>
 	void funcMiddle_Temp1(F f, T1 t1, T2 t2) { f(t1, t2); }
 
@@ -32,17 +31,17 @@ namespace ns1
 
 namespace ns2
 {
-	void printInfo(int &t)
+	void printInfo(int &)
 	{
-		cout << "printInfo(int &t)" << endl;
+		cout << "printInfo(int &)" << endl;
 	}
-	void printInfo(int &&t)
+	void printInfo(int &&)
 	{
-		cout << "printInfo(int &&t)" << endl;
+		cout << "printInfo(int &&)" << endl;
 	}
-	void printInfo(const int &t)
+	void printInfo(const int &)
 	{
-		cout << "printInfo(const int &t)" << endl;
+		cout << "printInfo(const int &)" << endl;
 	}
 
 	template <typename T>
@@ -55,7 +54,7 @@ namespace ns2
 namespace ns3
 {
 	int getData() { return 3; }
-	void funcLast3(int &&v1) { cout << "v1 = " << v1 << endl; }
+	void funcLast3(int v1) { cout << "v1 = " << v1 << endl; }
 
 	void funcMiddle_Temp2()
 	{
@@ -69,40 +68,52 @@ namespace ns4
 {
 	class Human
 	{
+		string m_sname;
+
 	public:
 		// Human(const string& tmpname):m_sname(tmpname)
-		//{	cout << "Human(const string & tmpname)" << endl;}
+		//{	cout << "Human(const string &)" << endl;}
 
 		// Human(string&& tmpname):m_sname(tmpname)
 		// Human(string&& tmpname):m_sname(std::move(tmpname))
-		//{	cout << "Human(string&& tmpname)" << endl;}
+		//{	cout << "Human(string&&)" << endl;}
 
 		template <typename T>
 		Human(T &&tmpname) : m_sname(std::forward<T>(tmpname))
 		{
-			cout << "Human(T &&tmpname)" << endl;
+			cout << "Human(T &&)" << endl;
 		}
 
 		Human(const Human &th) : m_sname(th.m_sname)
 		{
-			cout << "Human(Human const& th)" << endl;
+			cout << "Human(Human const &)" << endl;
 		}
 		Human(Human &&th) : m_sname(std::move(th.m_sname))
 		{
-			cout << "Human(Human &&th)" << endl;
+			cout << "Human(Human &&)" << endl;
 		}
-
-	private:
-		string m_sname;
 	};
 }
 
 namespace ns5
 {
+	void funcLast1(int v1, int &v2)
+	{
+		++v2; // 改变v2值，让其自增1
+		cout << v1 + v2 << endl;
+	}
+
 	template <typename F, typename... T>
 	void funcMiddle_Temp1(F f, T &&...t)
 	{
 		f(std::forward<T>(t)...);
+	}
+
+	int funcLast2(int v1, int &v2)
+	{
+		++v2; // 改变v2值，让其自增1
+		cout << v1 + v2 << endl;
+		return v1 + v2;
 	}
 
 	template <typename F, typename... T>
@@ -116,33 +127,21 @@ namespace ns5
 	{
 		return f(std::forward<T>(t)...);
 	}
-
-	void funcLast1(int v1, int &v2)
-	{
-		++v2; // 改变v2值，让其自增1
-		cout << v1 + v2 << endl;
-	}
-	int funcLast2(int v1, int &v2)
-	{
-		++v2;
-		cout << v1 + v2 << endl;
-		return v1 + v2;
-	}
 }
 
 namespace ns6
 {
-	template <typename F, typename... T>
-	decltype(auto) funcMiddle_Temp(F f, T &&...t)
-	{
-		return f(std::forward<T>(t)...);
-	}
-
 	void funcLast4(char *p)
 	{
 		// if (p != NULL)
 		if (p != nullptr)
 			strncpy(p, "abc", 3); // 为保证这行编译通过，请在.cpp开头位置增加：#pragma warning(disable : 4996)
+	}
+
+	template <typename F, typename... T>
+	decltype(auto) funcMiddle_Temp(F f, T &&...t)
+	{
+		return f(std::forward<T>(t)...);
 	}
 }
 
@@ -150,28 +149,43 @@ int main()
 {
 #if 0
 	using namespace ns1;
-
 	int i;
 
 	i = 50;
+	cout << "i = " << i << endl;
 	funcLast0(41, i); // 正常显示结果92
-	cout << "i = " << i << endl
-		 << endl;
+	cout << "i = " << i << endl;
+	cout << "********************\n";
 
 	i = 70;
-	funcMiddle_Temp1(funcLast1, 20, i);
-	cout << "i = " << i << endl
-		 << endl;
+	cout << "i = " << i << endl;
+	funcMiddle_Temp1(funcLast0, 20, i); // 正常显示结果91，间接调用funcLast0函数，未修改i值
+	cout << "i = " << i << endl;
+	cout << "********************\n";
+
+	i = 50;
+	cout << "i = " << i << endl;
+	funcLast1(41, i);			 // 正常显示结果92
+	cout << "i = " << i << endl; // i=51，修改了i的值
+	cout << "********************\n";
 
 	i = 70;
-	funcMiddle_Temp2(funcLast1, 20, i);
-	cout << "i = " << i << endl
-		 << endl;
+	cout << "i = " << i << endl;
+	funcMiddle_Temp1(funcLast1, 20, i); // 正常显示结果91，间接调用funcLast1函数，未修改i值
+	cout << "i = " << i << endl;
+	cout << "********************\n";
 
 	i = 70;
+	cout << "i = " << i << endl;
+	funcLast2(20, i); // 显示20, 70
+	cout << "i = " << i << endl;
+	cout << "********************\n";
+
+	i = 70;
+	cout << "i = " << i << endl;
 	funcMiddle_Temp2(funcLast2, 20, i);
-	cout << "i = " << i << endl
-		 << endl;
+	cout << "i = " << i << endl;
+	cout << "********************\n";
 #endif
 
 #if 0
@@ -199,14 +213,15 @@ int main()
 #if 0
 	using namespace ns4;
 	string sname = "ZhangSan";
-	Human myhuman1(sname);			// Human(T &&tmpname)
-	Human myhuman2(string("LiSi")); // Human(T &&tmpname), string("LiSi")是string类型
-	Human myhuman2_1("LiSi");		// Human(T &&tmpname), "LiSi"是char const [5]类型
+	Human myhuman1(sname);			// Human(T &&)
+	
+	Human myhuman2(string("LiSi")); // Human(T &&), string("LiSi")是string右值类型
+	Human myhuman2_1("LiSi");		// Human(T &&), "LiSi"是char const [5]类型
 
-	// Human myhuman3(myhuman1);//error
-	Human myhuman4(std::move(myhuman1));	// Human(Human &&th)
-	const Human myhuman5(string("WangWu")); // Human(T &&tmpname)
-	Human myhuman6(myhuman5);				// Human(Human const& th)
+	//Human myhuman3(myhuman1);//error，myhuman1左值，编译器认为匹配构造函数模板比匹配构造函数更合适
+	Human myhuman4(std::move(myhuman1));	// Human(Human &&)
+	const Human myhuman5(string("WangWu")); // Human(T &&)
+	Human myhuman6(myhuman5);				// Human(Human const &)
 #endif
 
 #if 0
@@ -214,23 +229,25 @@ int main()
 	int j;
 
 	j = 70;
+	cout << "j = " << j << endl;
 	funcMiddle_Temp3(funcLast2, 20, j);
-	cout << "j = " << j << endl
-		 << endl;
+	cout << "j = " << j << endl;
+	cout << "*************\n";
 
 	j = 70;
-	int k = funcMiddle_Temp2(funcLast2, 20, j);
 	cout << "j = " << j << endl;
-	cout << "k = " << k << endl;
+	cout << funcMiddle_Temp2(funcLast2, 20, j) << endl;
+	cout << "j = " << j << endl;
 #endif
 
-#if 1
+#if 0
 	using namespace ns6;
 	char *p = new char[100];
 	memset(p, 0, 100);
 
 	funcMiddle_Temp(funcLast4, p);
-	// funcMiddle_Temp(funcLast4, NULL);//error
+	// #define NULL 0
+	//  funcMiddle_Temp(funcLast4, NULL);//error
 	funcMiddle_Temp(funcLast4, nullptr);
 
 	delete[] p;

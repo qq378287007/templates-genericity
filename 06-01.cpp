@@ -135,7 +135,7 @@ int main()
 	using namespace ns2;
 	const int var3 = Calc<12, 15>::addvalue;
 	static_assert(var3 == 27, "sth error");
-	cout << var3 << endl;
+	//cout << var3 << endl;
 
 	cout << Calc2<12, 15>::subvalue << endl;
 
@@ -143,8 +143,8 @@ int main()
 	testfunc(Calc2<12, 15>::addvalue);
 
 	const int tempvalue = Factorial<5>::value;
-	cout << tempvalue << endl;
 	static_assert(tempvalue == 120, "sth error");
+	//cout << tempvalue << endl;
 #endif
 
 #if 0

@@ -13,6 +13,12 @@ namespace ns0
 	void func(vector<T> &&) { cout << "void func<T>(vector<T> &&)" << endl; }
 
 	void myfunc(int &&) { cout << "void myfunc(int &&)" << endl; }
+
+	template <typename T>
+	void myfunc2(T &&) { cout << "void myfunc2(T &&)" << endl; }
+
+	template <typename T>
+	void myfunc3(const T &&) { cout << "void myfunc3(T &&)" << endl; }
 }
 
 namespace ns1
@@ -59,8 +65,16 @@ int main()
 
 	// func(aa);//error
 
-	//int i = 100;
-	//myfunc(i); //错，右值引用不能接(绑)左值
+	int i = 100;
+	myfunc(100);
+	// myfunc(i); //错，右值引用不能接(绑)左值
+
+	myfunc2(100);
+	myfunc2(i);
+
+	myfunc3(100);
+	// myfunc3(i);//error
+
 #endif
 
 #if 0
