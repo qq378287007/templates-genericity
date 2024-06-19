@@ -177,7 +177,6 @@ namespace tplt2
 		using Tail = U;
 	};
 
-	//---------------------------
 	template <typename TPLT>
 	class front
 	{
@@ -294,15 +293,14 @@ namespace tplt2
 namespace ns1
 {
 	template <typename Args>
-	class TestTPClass
+	struct TestTPClass
 	{
-	public:
 		// 下面注意不要使用find，否则可能导致编译出错的境况
 		using Arg1 = typename tplt2::find_nostrict<Args, 0>::type;
 		using Arg2 = typename tplt2::find_nostrict<Args, 1>::type;
 		using Arg3 = typename tplt2::find_nostrict<Args, 2>::type;
-		// 可以根据需要加入更多Arg开头的类型
 
+		// 可以根据需要加入更多Arg开头的类型
 		void myfunc(Arg1 val1, Arg2 val2) { cout << "myfunc, sum: " << val1 + val2 << endl; }
 	};
 }
@@ -326,30 +324,29 @@ int main()
 #if 0
 	using namespace tplt;
 
-	cout << typeid(front<TPL_NM1>::type).name() << endl;
+	cout << "front<TPL_NM1>::type = " << type_id_with_cvr<front<TPL_NM1>::type>().pretty_name() << endl;
 	// cout << typeid(front<TPL_NM2>::type).name() << endl;//error
 
 	cout << tplt::size<TPL_NM1>::value << endl;
 	cout << tplt::size<TPL_NM2>::value << endl;
 
-	cout << typeid(pop_front<TPL_NM1>::type).name() << endl;
-	// cout << typeid(pop_front<TPL_NM2>::type).name() << endl; // 编译报错，问题类似于front
+	cout << "pop_front<TPL_NM1>::type = " << type_id_with_cvr<pop_front<TPL_NM1>::type>().pretty_name() << endl;
+	// cout << "pop_front<TPL_NM2>::type = " << type_id_with_cvr<pop_front<TPL_NM2>::type>().pretty_name() << endl;//error
 
-	cout << typeid(push_front<TPL_NM1, bool>::type).name() << endl;
-	cout << typeid(push_front<TPL_NM2, bool>::type).name() << endl;
+	cout << "push_front<TPL_NM1, bool>::type = " << type_id_with_cvr<push_front<TPL_NM1, bool>::type>().pretty_name() << endl;
+	cout << "push_front<TPL_NM2, bool>::type = " << type_id_with_cvr<push_front<TPL_NM2, bool>::type>().pretty_name() << endl;
 
-	cout << typeid(push_back<TPL_NM1, bool>::type).name() << endl;
-	cout << typeid(push_back<TPL_NM2, bool>::type).name() << endl;
+	cout << "push_back<TPL_NM1, bool>::type = " << type_id_with_cvr<push_back<TPL_NM1, bool>::type>().pretty_name() << endl;
+	cout << "push_back<TPL_NM2, bool>::type = " << type_id_with_cvr<push_back<TPL_NM2, bool>::type>().pretty_name() << endl;
 
-	using TmpType = push_front<pop_front<TPL_NM1>::type, __int64>::type;
-	cout << typeid(TmpType).name() << endl;
-	cout << typeid(replace_front<TPL_NM1, __int64>::type).name() << endl;
+	cout << "push_front<pop_front<TPL_NM1>::type, __int64>::type = " << type_id_with_cvr<push_front<pop_front<TPL_NM1>::type, __int64>::type>().pretty_name() << endl;
+	cout << "replace_front<TPL_NM1, __int64>::type = " << type_id_with_cvr<replace_front<TPL_NM1, __int64>::type>().pretty_name() << endl;
 
 	cout << tplt::is_empty<TPL_NM1>::value << endl; // 注意不要丢掉tplt::
 	cout << tplt::is_empty<TPL_NM2>::value << endl;
 #endif
 
-#if 1
+#if 0
 	using namespace tplt;
 
 	cout << "tplt::find<TPL_NM1, 2>::type: " << type_id_with_cvr<tplt::find<TPL_NM1, 2>::type>().pretty_name() << endl;
@@ -365,36 +362,37 @@ int main()
 
 #if 0
 	using namespace tplt2;
-	cout << typeid(front<MAC_TYPELIST1(int)>::type).name() << endl;
-	cout << typeid(front<MAC_TYPELIST3(char, float, double)>::type).name() << endl;
 
-	cout << tplt2::size<NullTypelist>::value << endl;
-	cout << tplt2::size<MAC_TYPELIST1(int)>::value << endl;
-	cout << tplt2::size<MAC_TYPELIST3(int, double, char)>::value << endl;
+	cout << "front<MAC_TYPELIST1(int)>::type: " << type_id_with_cvr<front<MAC_TYPELIST1(int)>::type>().pretty_name() << endl;
+	cout << "front<MAC_TYPELIST3(char, float, double)>::type: " << type_id_with_cvr<front<MAC_TYPELIST3(char, float, double)>::type>().pretty_name() << endl;
 
-	cout << typeid(pop_front<MAC_TYPELIST1(int)>::type).name() << endl;
-	cout << typeid(pop_front<MAC_TYPELIST3(char, float, double)>::type).name() << endl;
+	cout << "tplt2::size<NullTypelist>::value: " << tplt2::size<NullTypelist>::value << endl;
+	cout << "tplt2::size<MAC_TYPELIST1(int)>::value: " << tplt2::size<MAC_TYPELIST1(int)>::value << endl;
+	cout << "tplt2::size<MAC_TYPELIST3(int, double, char)>::value: " << tplt2::size<MAC_TYPELIST3(int, double, char)>::value << endl;
 
-	cout << typeid(push_front<MAC_TYPELIST1(int), bool>::type).name() << endl;
-	cout << typeid(push_front<MAC_TYPELIST2(char, double), int>::type).name() << endl;
+	cout << "pop_front<MAC_TYPELIST1(int)>::type: " << type_id_with_cvr<pop_front<MAC_TYPELIST1(int)>::type>().pretty_name() << endl;
+	cout << "pop_front<MAC_TYPELIST3(char, float, double)>::type: " << type_id_with_cvr<pop_front<MAC_TYPELIST3(char, float, double)>::type>().pretty_name() << endl;
 
-	cout << tplt2::is_empty<MAC_TYPELIST1(int)>::value << endl;
-	cout << tplt2::is_empty<MAC_TYPELIST3(char, float, double)>::value << endl;
-	cout << tplt2::is_empty<NullTypelist>::value << endl;
+	cout << "push_front<MAC_TYPELIST1(int), bool>::type: " << type_id_with_cvr<push_front<MAC_TYPELIST1(int), bool>::type>().pretty_name() << endl;
+	cout << "push_front<MAC_TYPELIST2(char, double), int>::type: " << type_id_with_cvr<push_front<MAC_TYPELIST2(char, double), int>::type>().pretty_name() << endl;
 
-	cout << typeid(tplt2::find<MAC_TYPELIST1(int), 0>::type).name() << endl;
-	cout << typeid(tplt2::find<MAC_TYPELIST3(char, float, double), 2>::type).name() << endl;
-	// cout << typeid(tplt2::find<MAC_TYPELIST3(char, float, double), 5>::type).name() << endl;
+	cout << "tplt2::is_empty<MAC_TYPELIST1(int)>::value: " << tplt2::is_empty<MAC_TYPELIST1(int)>::value << endl;
+	cout << "tplt2::is_empty<MAC_TYPELIST3(char, float, double)>::value: " << tplt2::is_empty<MAC_TYPELIST3(char, float, double)>::value << endl;
+	cout << "tplt2::is_empty<NullTypelist>::value: " << tplt2::is_empty<NullTypelist>::value << endl;
 
-	cout << typeid(tplt2::find2<MAC_TYPELIST1(int), 0>::type).name() << endl;
-	cout << typeid(tplt2::find2<MAC_TYPELIST3(char, float, double), 2>::type).name() << endl;
-	// cout << typeid(tplt2::find2<MAC_TYPELIST3(char, float, double), 5>::type).name() << endl;
+	cout << "tplt2::find<MAC_TYPELIST1(int), 0>::type: " << type_id_with_cvr<tplt2::find<MAC_TYPELIST1(int), 0>::type>().pretty_name() << endl;
+	cout << "tplt2::find<<MAC_TYPELIST3(char, float, double), 2>::type: " << type_id_with_cvr<tplt2::find<MAC_TYPELIST3(char, float, double), 2>::type>().pretty_name() << endl;
+	// cout << "tplt2::find<MAC_TYPELIST3(char, float, double), 5>::type: " << type_id_with_cvr<tplt2::find<MAC_TYPELIST3(char, float, double), 5>::type>().pretty_name() << endl;
 
-	cout << typeid(tplt2::find_nostrict<MAC_TYPELIST4(int, double, char, float), 2>::type).name() << endl;
-	cout << typeid(tplt2::find_nostrict<MAC_TYPELIST4(int, double, char, float), 100>::type).name() << endl;
+	cout << "tplt2::find2<MAC_TYPELIST1(int), 0>::type: " << type_id_with_cvr<tplt2::find2<MAC_TYPELIST1(int), 0>::type>().pretty_name() << endl;
+	cout << "tplt2::find2<<MAC_TYPELIST3(char, float, double), 2>::type: " << type_id_with_cvr<tplt2::find2<MAC_TYPELIST3(char, float, double), 2>::type>().pretty_name() << endl;
+	// cout << "tplt2::find2<MAC_TYPELIST3(char, float, double), 5>::type: " << type_id_with_cvr<tplt2::find2<MAC_TYPELIST3(char, float, double), 5>::type>().pretty_name() << endl;
+
+	cout << "tplt2::find_nostrict<MAC_TYPELIST4(int, double, char, float), 2>::type: " << type_id_with_cvr<tplt2::find_nostrict<MAC_TYPELIST4(int, double, char, float), 2>::type>().pretty_name() << endl;
+	cout << "tplt2::find_nostrict<MAC_TYPELIST4(int, double, char, float), 100>::type: " << type_id_with_cvr<tplt2::find_nostrict<MAC_TYPELIST4(int, double, char, float), 100>::type>().pretty_name() << endl;
 #endif
 
-#if 0
+#if 1
 	using namespace ns1;
 	TestTPClass<MAC_TYPELIST2(int, int)> myodtpobj;
 	myodtpobj.myfunc(18, 19);
