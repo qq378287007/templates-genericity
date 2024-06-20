@@ -53,7 +53,7 @@ namespace ns3
 	{
 		return (... - args); // 形式1
 	}
-	
+
 	template <typename... T>
 	auto sub_val_right(T... args)
 	{
@@ -369,6 +369,12 @@ namespace ns11
 	};
 }
 
+template <typename... T>
+auto myfunc(T... args)
+{
+	return (100 - ... - args);
+}
+
 int main()
 {
 #if 0
@@ -393,7 +399,7 @@ int main()
 	myfunc(0);
 #endif
 
-#if 1
+#if 0
 	using namespace ns3;
 	cout << add_val(10, 20, 30) << endl;		   // 60(10+20+30)
 	cout << sub_val_left(10, 20, 30, 40) << endl;  //-80(10-20-30-40)
@@ -461,6 +467,8 @@ int main()
 	myclasst<int, float, double> myc3;
 	myclasst<int, float, double, char> myc4;
 #endif
+
+	cout << myfunc(10, 20, 30) << endl;
 
 	cout << "Over!\n";
 	return 0;

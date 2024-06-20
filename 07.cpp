@@ -3,10 +3,11 @@
 #include <list>
 #include <functional>
 #include <algorithm>
+// #include <type_traits>
 using namespace std;
 
-// #include <boost/type_index.hpp>
-// #pragma warning(disable : 4996)
+#include <boost/type_index.hpp>
+using boost::typeindex::type_id_with_cvr;
 
 namespace ns1
 {
@@ -107,37 +108,36 @@ namespace ns1
 				head->prev = pnewnode;		 // 特殊mylist_node对象节点的prev指针指向新mylist_node对象节点，注意本行语句放在最后，不能与上行互换
 			}
 		}
-
-		void clear()
-		{
-			if (head->next != head)
-			{
-				// 当前容器不为空
-				mylist_node<T> *currnode = head->next; // currnode指向第一个节点
-				while (currnode != head)			   // 指向的不是"特殊mylist_node对象节点"
+		/*
+				void clear()
 				{
-					mylist_node<T> *nextnode = currnode->next; // 指向当前节点后的节点（下一个节点）
-					delete currnode;						   // 释放当前节点所指向的内存
-					currnode = nextnode;					   // 让currnode指向下一个节点
+					if (head->next != head)
+					{
+						// 当前容器不为空
+						mylist_node<T> *currnode = head->next; // currnode指向第一个节点
+						while (currnode != head)			   // 指向的不是"特殊mylist_node对象节点"
+						{
+							mylist_node<T> *nextnode = currnode->next; // 指向当前节点后的节点（下一个节点）
+							delete currnode;						   // 释放当前节点所指向的内存
+							currnode = nextnode;					   // 让currnode指向下一个节点
+						}
+					}
 				}
-			}
-		}
-
+		*/
 	private:
 		mylist_node<T> *head;
 	};
 
-	class A
+	struct A
 	{
-	public:
-		explicit A(int tmpi) : m_i(tmpi) { cout << "A::A()" << endl; }
 		int m_i;
+		explicit A(int tmpi) : m_i(tmpi) { cout << "A::A()" << endl; }
 	};
 
 	// 别名模板
-	template <class _Iter> //_Iter代表迭代器类型
+	template <class _Iter>													//_Iter代表迭代器类型
 	using _Iter_cat_t = typename iterator_traits<_Iter>::iterator_category; // 为萃取机定义别名模板（5.1.2节看到过）
-	//using _Iter_cat_t = typename iterator_traits<_Iter>::bidirectional_iterator_tag; // 为萃取机定义别名模板（5.1.2节看到过）
+	// using _Iter_cat_t = typename iterator_traits<_Iter>::bidirectional_iterator_tag; // 为萃取机定义别名模板（5.1.2节看到过）
 
 	// 变量模板（元函数）
 	// template <class _From, class _To>
@@ -202,6 +202,8 @@ int main()
 	// list<int>::iterator
 	cout << typeid(mylist_iterator<int>::iterator_category).name() << endl;
 	//cout << typeid(mylist_iterator<int>::bidirectional_iterator_tag).name() << endl;
+	cout << "mylist_iterator<int>::iterator_category: " << type_id_with_cvr<mylist_iterator<int>::iterator_category>().pretty_name() << endl;
+	//cout << "mylist_iterator<int>::bidirectional_iterator_tag: " << type_id_with_cvr<mylist_iterator<int>::bidirectional_iterator_tag>().pretty_name() << endl;
 #endif
 
 #if 0
